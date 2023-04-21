@@ -12,66 +12,104 @@ using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace toMarkdown
-{
-    public partial class toMarkdown : Form
+{ // 1 KERE SELECT YAPMA ?
+    public partial class ToMarkdown : Form
     {
 
-        public toMarkdown()
+        public ToMarkdown()
         {
             InitializeComponent();
         }
 
-        int lastChangedLine = -1; // son değişen satırın indeksi, -1 ile başlatılır
+        int currentline; // son değişen satırın indeksi, -1 ile başlatılır
         //bool isTextChanged = false; // metinde değişiklik olup olmadığını kontrol eder
-
+        string text;
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
-            lastChangedLine = richTextBox1.GetLineFromCharIndex(richTextBox1.GetFirstCharIndexOfCurrentLine());
+            //GetFirstCharIndexOfCurrentLine() yöntemi, kontroldeki mevcut satırın ilk karakterinin indexini döndürürken,
+            //GetLineFromCharIndex() yöntemi, bir karakter dizininin satır numarasını döndürür.
+            int firstcharindex = richTextBox1.GetFirstCharIndexOfCurrentLine();
 
-            if (lastChangedLine != -1 && richTextBox1.Lines.Length > lastChangedLine)
+
+            currentline = richTextBox1.GetLineFromCharIndex(firstcharindex);
+
+            if (richTextBox1.Lines.Length > currentline)
             {
-                string text = richTextBox1.Lines[lastChangedLine];
-                Debug.WriteLine(lastChangedLine);
-                Debug.WriteLine(lastChangedLine + ": " + text.StartsWith("###"));
-                //Debug.WriteLine(text);
-                // Kontrolde # karakteri var mı diye kontrol et
+                string currentlinetext = richTextBox1.Lines[currentline];
+             
+                Debug.WriteLine(currentlinetext);
 
-                if (text.StartsWith("#"))
+                if (currentlinetext.StartsWith("# "))
                 {
-                    if (text.StartsWith("#"))
-                    {
-                        Heading(text, 32);
-                    }
-                    if (text.StartsWith("##"))
-                    {
-                        Heading(text, 24);
-                    }
-                    if (text.StartsWith("###"))
-                    {
-                        Heading(text, 18);
-                    }
+                    Heading_1(firstcharindex, currentlinetext, 32);
                 }
-                else DefaultText(text);
-
+                else if (currentlinetext.StartsWith("## "))
+                {
+                    Heading_2(firstcharindex, currentlinetext, 24);
+                }
+                else if (currentlinetext.StartsWith("### "))
+                {
+                    Heading_3(firstcharindex, currentlinetext, 18);
+                }
+                else {
+                    richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Regular);
+                      richTextBox1.DeselectAll();
+                }
             }
 
         }
 
-        private void Heading(string text, float fontSize)
+        private void Heading_1(int firstcharindex, string currentlinetext, float fontSize)
         {
-            // Tüm metni büyük harfe dönüştür
-            richTextBox1.SelectionLength = text.Length;
-            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, richTextBox1.SelectionFont.Style);
-            //richTextBox1.Select(richTextBox1.Text.Length, 0); // metin sonuna atar kullanıcıyı
+            richTextBox1.Select(firstcharindex + currentlinetext.Length - 2, 2);
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
+            // en son yazdıpımız text'in sonuna atar.
+            richTextBox1.Select(firstcharindex, 2);
+            richTextBox1.SelectionColor = Color.Gray;
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
+            richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+            richTextBox1.SelectionColor = Color.White;
+            AddHorizontalLineToLine(currentline);
+            richTextBox1.DeselectAll();
+            // currentlinetext.Length mevcut satırdaki text'in uzunluğu
+
+        }
+        private void Heading_2(int firstcharindex, string currentlinetext, float fontSize)
+        {
+            richTextBox1.Select(firstcharindex + currentlinetext.Length - 3, 3);
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Underline);
+            // en son yazdıpımız text'in sonuna atar.
+            richTextBox1.Select(firstcharindex, 3);
+            richTextBox1.SelectionColor = Color.Gray;
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
+            richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+            richTextBox1.SelectionColor = Color.White;
+            richTextBox1.DeselectAll();
+            // currentlinetext.Length mevcut satırdaki text'in uzunluğu
+        }
+
+        private void Heading_3(int firstcharindex, string currentlinetext, float fontSize)
+        {
+            richTextBox1.Select(firstcharindex + currentlinetext.Length - 4, 4);
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Underline);
+            // en son yazdıpımız text'in sonuna atar.
+            richTextBox1.Select(firstcharindex, 4);
+            richTextBox1.SelectionColor = Color.Gray;
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
+            richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+            richTextBox1.SelectionColor = Color.White;
+            richTextBox1.DeselectAll();
+            // currentlinetext.Length mevcut satırdaki text'in uzunluğu
         }
 
         private void DefaultText(string text)
         {
-            //richTextBox1.SelectionStart = richTextBox1.GetFirstCharIndexFromLine(lastChangedLine);
-            richTextBox1.SelectionLength = text.Length;
-            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 12, richTextBox1.SelectionFont.Style);
-            //richTextBox1.SelectionStart = richTextBox1.Text.Length;
+
         }
 
+        private void AddHorizontalLineToLine(int lineNumber, int thickness = 1)
+        {
+            //richTextBox1.AppendText("──────────────────────────────────────");
+        }
     }
 }

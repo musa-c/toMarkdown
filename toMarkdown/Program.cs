@@ -19,7 +19,7 @@ namespace toMarkdown
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new toMarkdown());
+            Application.Run(new ToMarkdown());
         }
         /// ***also dllimport of that function***
         [System.Runtime.InteropServices.DllImport("user32.dll")]

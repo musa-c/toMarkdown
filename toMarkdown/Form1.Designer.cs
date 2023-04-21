@@ -1,6 +1,6 @@
 ﻿namespace toMarkdown
 {
-    partial class toMarkdown
+    partial class ToMarkdown
     {
         /// <summary>
         /// Required designer variable.
@@ -44,14 +44,14 @@
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
-            // toMarkdown
+            // ToMarkdown
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.richTextBox1);
-            this.Name = "toMarkdown";
+            this.Name = "ToMarkdown";
             this.Text = "toMarkdown";
             this.ResumeLayout(false);
 
