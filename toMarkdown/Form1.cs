@@ -38,7 +38,6 @@ namespace toMarkdown
             if (richTextBox1.Lines.Length > currentline)
             {
                 string currentlinetext = richTextBox1.Lines[currentline];
-                Debug.WriteLine(currentlinetext);
 
                 if (currentlinetext.StartsWith("# "))
                 {
@@ -61,12 +60,6 @@ namespace toMarkdown
                         richTextBox1.Select(firstcharindex + currentlinetext.Length, 0);
                         richTextBox1.DeselectAll();
                 }
-                //    else
-                //{
-                //    richTextBox1.Select(richTextBox1.SelectionStart, 0);
-                //    richTextBox1.DeselectAll();
-                //}
-
 
             };
 
@@ -74,7 +67,7 @@ namespace toMarkdown
                 {
                     BoldText(firstcharindex, currentlinetext);
 
-                }else if (Regex.Matches(currentlinetext, @"\*").Count >= 1)
+                }else if (Regex.Matches(currentlinetext, @"\*").Count >= 2)
                 {
                     ItalicText(firstcharindex, currentlinetext);
 
@@ -95,7 +88,6 @@ namespace toMarkdown
                 richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
                 richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
                 richTextBox1.SelectionColor = Color.White;
-                AddHorizontalLineToLine(currentline);
                 richTextBox1.DeselectAll();
             }
             // currentlinetext.Length mevcut satırdaki text'in uzunluğu
@@ -134,86 +126,107 @@ namespace toMarkdown
                 // currentlinetext.Length mevcut satırdaki text'in uzunluğu
             }
         }
-        int firstIndex;
-        int secondIndex;
-        int loop;
-        int firstcharindex;
-        string currentlinetext = "";
+        int firstIndexBold;
+        int secondIndexBold;
+        int firstcharindexBold;
+        string currentlinetextBold = "";
         //int cu
-        List<int> indexes = new List<int>();
         private void BoldText(int firstcharindex, string currentlinetext)
         {
-            //int cout = Regex.Matches(currentlinetext, @"\*\*").Count;
-            Debug.WriteLine("firstcharindex: "+ firstcharindex);
-            Debug.WriteLine("this.firstcharindex: "+ this.firstcharindex);
+        
 
-            if (this.firstcharindex != firstcharindex)
+            if (this.firstcharindexBold != firstcharindex)
             {
-                firstIndex = 0;
-                secondIndex = 0;
-                this.firstcharindex = firstcharindex;
+                firstIndexBold = 0;
+                secondIndexBold = 0;
+                this.firstcharindexBold = firstcharindex;
             }
-            if (this.currentlinetext != currentlinetext && this.firstcharindex == firstcharindex)
+            if (this.currentlinetextBold != currentlinetext && this.firstcharindexBold == firstcharindex)
             {
-                if (this.currentlinetext.Length > currentlinetext.Length)
+                if (this.currentlinetextBold.Length > currentlinetext.Length)
                 {
-                    secondIndex = currentlinetext.LastIndexOf("**");
+                    secondIndexBold = currentlinetext.LastIndexOf("**");
                     richTextBox1.SelectionColor = Color.White;
                     richTextBox1.DeselectAll();
                 }
-                this.currentlinetext = currentlinetext;
+                this.currentlinetextBold = currentlinetext;
             }
 
-            if (currentlinetext.IndexOf("**",secondIndex + 2) != -1)
+            if (currentlinetext.IndexOf("**", secondIndexBold + 2 > currentlinetext.Length ? 0 : secondIndexBold + 2) != -1 && secondIndexBold != -1)
             {
-                firstIndex = currentlinetext.IndexOf("**",0);
-                secondIndex = currentlinetext.IndexOf("**", firstIndex + 2);
-                    Debug.WriteLine("firstIndex: " + firstIndex);
-                    Debug.WriteLine("secondIndex: " + secondIndex);
+                firstIndexBold = currentlinetext.IndexOf("**",0);
+                secondIndexBold = currentlinetext.IndexOf("**", firstIndexBold + 2);
+                if (secondIndexBold == -1)
+                {
+                    secondIndexBold = 0;
+                    return;
+                }
 
-                    richTextBox1.Select(firstcharindex + firstIndex + 2, secondIndex - firstIndex - 2);
+
+                richTextBox1.Select(firstcharindex + firstIndexBold + 2, secondIndexBold - firstIndexBold - 2);
                     richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Bold);
                     richTextBox1.SelectionColor = Color.Green;
-                    richTextBox1.Select(firstcharindex + firstIndex, 2);
+                    richTextBox1.Select(firstcharindex + firstIndexBold, 2);
                     richTextBox1.SelectedText = "";
-                    richTextBox1.Select(firstcharindex + secondIndex -2, 2);
+                    richTextBox1.Select(firstcharindex + secondIndexBold - 2, 2);
                     richTextBox1.SelectedText = "";
-                richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+                    this.currentlinetextBold = richTextBox1.Lines[currentline];
+                    richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
                     richTextBox1.SelectionColor = Color.White;
-                    richTextBox1.DeselectAll();
+                richTextBox1.DeselectAll();
             }
         }
 
 
+        int firstIndexItalic;
+        int secondIndexItalic;
+        int firstcharindexItalic;
+        string currentlinetextItalic = "";
 
         private void ItalicText(int firstcharindex, string currentlinetext)
         {
-            int firstIndex = currentlinetext.IndexOf("*");
-            int secondIndex = currentlinetext.IndexOf("*", firstIndex + 1);
 
-            if (secondIndex != -1)
+            if (this.firstcharindexItalic != firstcharindex)
             {
-                //string boldText = currentlinetext.Substring(firstIndex + 2, secondIndex - firstIndex - 2);
-                if (richTextBox1.SelectionFont.Style != FontStyle.Italic)
+                firstIndexItalic = 0;
+                secondIndexItalic = 0;
+                this.firstcharindexItalic = firstcharindex;
+            }
+            if (this.currentlinetextItalic != currentlinetext && this.firstcharindexItalic == firstcharindex)
+            {
+                if (this.currentlinetextItalic.Length > currentlinetext.Length)
                 {
-                    richTextBox1.Select(firstcharindex + firstIndex + 1, secondIndex - firstIndex - 1);
-                    richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Italic);
-                    richTextBox1.SelectionColor = Color.Green;
-                    richTextBox1.Select(firstcharindex + firstIndex, 1);
-                    richTextBox1.SelectionColor = Color.Gray;
-                    richTextBox1.Select(firstcharindex + secondIndex, 1);
-                    richTextBox1.SelectionColor = Color.Gray;
-                    richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+                    firstIndexItalic = currentlinetext.LastIndexOf("*");
                     richTextBox1.SelectionColor = Color.White;
                     richTextBox1.DeselectAll();
                 }
-                else
+                this.currentlinetextItalic = currentlinetext;
+            }
+            if (currentlinetext.IndexOf("*", secondIndexItalic + 1 >= currentlinetext.Length ? 0 : secondIndexItalic + 1) != -1 && secondIndexItalic != -1)
+            {
+                firstIndexItalic = currentlinetext.IndexOf("*", 0);
+                secondIndexItalic = currentlinetext.IndexOf("*", firstIndexItalic + 1);
+                if (secondIndexItalic == -1)
                 {
-                    richTextBox1.Select(richTextBox1.SelectionStart, 0);
-                    richTextBox1.DeselectAll();
+                    secondIndexItalic = 0;
+                    return;
                 }
+
+                richTextBox1.Select(firstcharindex + firstIndexItalic + 1, secondIndexItalic - firstIndexItalic - 1);
+                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Italic);
+                richTextBox1.SelectionColor = Color.Green;
+                richTextBox1.Select(firstcharindex + firstIndexItalic, 1);
+                richTextBox1.SelectedText = "";
+                richTextBox1.Select(firstcharindex + secondIndexItalic - 1, 1);
+                richTextBox1.SelectedText = "";
+                this.currentlinetextItalic = richTextBox1.Lines[currentline];
+                richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+                richTextBox1.SelectionColor = Color.White;
+                richTextBox1.DeselectAll();
+
             }
         }
+
         private void DefaultText(string text)
         {
 

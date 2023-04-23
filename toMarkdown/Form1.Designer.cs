@@ -39,7 +39,7 @@
             this.richTextBox1.ForeColor = System.Drawing.Color.White;
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(800, 450);
+            this.richTextBox1.Size = new System.Drawing.Size(554, 857);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             this.richTextBox1.CursorChanged += new System.EventHandler(this.richTextBox1_CursorChanged);
@@ -50,7 +50,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(554, 857);
             this.Controls.Add(this.richTextBox1);
             this.Name = "ToMarkdown";
             this.Text = "toMarkdown";
