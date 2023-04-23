@@ -42,6 +42,7 @@
             this.richTextBox1.Size = new System.Drawing.Size(800, 450);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            this.richTextBox1.CursorChanged += new System.EventHandler(this.richTextBox1_CursorChanged);
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // ToMarkdown

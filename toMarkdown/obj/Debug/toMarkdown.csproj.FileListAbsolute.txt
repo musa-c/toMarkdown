@@ -3,9 +3,9 @@ C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\bin\Debug\toMarkdown.exe
 C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\bin\Debug\toMarkdown.pdb
 C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.csproj.AssemblyReference.cache
 C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.csproj.SuggestedBindingRedirects.cache
+C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.ToMarkdown.resources
 C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.Properties.Resources.resources
 C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.csproj.GenerateResource.cache
 C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.csproj.CoreCompileInputs.cache
 C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.exe
 C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.pdb
-C:\Users\musac\Desktop\Project\toMarkdown\toMarkdown\obj\Debug\toMarkdown.toMarkdown.resources
