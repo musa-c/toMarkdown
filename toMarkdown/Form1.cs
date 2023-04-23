@@ -70,11 +70,11 @@ namespace toMarkdown
 
             };
 
-                if (Regex.Matches(currentlinetext, @"\*\*").Count >= 2)
+                if (Regex.Matches(currentlinetext, @"\*\*").Count >= 1)
                 {
                     BoldText(firstcharindex, currentlinetext);
 
-                }else if (Regex.Matches(currentlinetext, @"\*").Count >= 2)
+                }else if (Regex.Matches(currentlinetext, @"\*").Count >= 1)
                 {
                     ItalicText(firstcharindex, currentlinetext);
 
@@ -137,47 +137,50 @@ namespace toMarkdown
         int firstIndex;
         int secondIndex;
         int loop;
+        int firstcharindex;
+        string currentlinetext = "";
         //int cu
         List<int> indexes = new List<int>();
         private void BoldText(int firstcharindex, string currentlinetext)
         {
+            //int cout = Regex.Matches(currentlinetext, @"\*\*").Count;
+            Debug.WriteLine("firstcharindex: "+ firstcharindex);
+            Debug.WriteLine("this.firstcharindex: "+ this.firstcharindex);
 
-            int cout = Regex.Matches(currentlinetext, @"\*\*").Count;
-            //Debug.Write(cout);
-            
-            if (cout % 2 == 0)
+            if (this.firstcharindex != firstcharindex)
             {
-               
-                Regex rx = new Regex(@"\*\*");
-                foreach (Match match in rx.Matches(currentlinetext))
+                firstIndex = 0;
+                secondIndex = 0;
+                this.firstcharindex = firstcharindex;
+            }
+            if (this.currentlinetext != currentlinetext && this.firstcharindex == firstcharindex)
+            {
+                if (this.currentlinetext.Length > currentlinetext.Length)
                 {
-                    if (!(indexes.Contains(match.Index)))
-                    {
-                        indexes.Add(match.Index);
-                    }
-                    else
-                    {
-                        indexes.Remove(match.Index);
-                    }
+                    secondIndex = currentlinetext.LastIndexOf("**");
+                    richTextBox1.SelectionColor = Color.White;
+                    richTextBox1.DeselectAll();
                 }
-                for (int i = 0; i < indexes.Count-1; i++)
-                {
-                  
-                    Debug.WriteLine(indexes[i] + "-" + indexes[i + 1]);
-                    if (richTextBox1.SelectionFont.Style != FontStyle.Bold)
-                    {
-                        richTextBox1.Select(firstcharindex + indexes[i] + 2, indexes[i + 1] - indexes[i] -2);
-                        richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Bold);
-                        richTextBox1.SelectionColor = Color.White;
-                        richTextBox1.Select(firstcharindex + indexes[i], 2);
-                        richTextBox1.SelectionColor = Color.Gray;
-                        richTextBox1.Select(firstcharindex + indexes[i + 1], 2);
-                        richTextBox1.SelectionColor = Color.Gray;
-                        richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
-                        richTextBox1.SelectionColor = Color.White;
-                        richTextBox1.DeselectAll();
-                    }
-                }
+                this.currentlinetext = currentlinetext;
+            }
+
+            if (currentlinetext.IndexOf("**",secondIndex + 2) != -1)
+            {
+                firstIndex = currentlinetext.IndexOf("**",0);
+                secondIndex = currentlinetext.IndexOf("**", firstIndex + 2);
+                    Debug.WriteLine("firstIndex: " + firstIndex);
+                    Debug.WriteLine("secondIndex: " + secondIndex);
+
+                    richTextBox1.Select(firstcharindex + firstIndex + 2, secondIndex - firstIndex - 2);
+                    richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Bold);
+                    richTextBox1.SelectionColor = Color.Green;
+                    richTextBox1.Select(firstcharindex + firstIndex, 2);
+                    richTextBox1.SelectedText = "";
+                    richTextBox1.Select(firstcharindex + secondIndex -2, 2);
+                    richTextBox1.SelectedText = "";
+                richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+                    richTextBox1.SelectionColor = Color.White;
+                    richTextBox1.DeselectAll();
             }
         }
 
