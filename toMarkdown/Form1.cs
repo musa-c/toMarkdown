@@ -51,17 +51,39 @@ namespace toMarkdown
                 {
                     Heading_3(firstcharindex, currentlinetext, 18);
                 }
+                else if (currentlinetext.StartsWith(">"))
+                {
+                    BlockquoteText(firstcharindex, currentlinetext);
+
+                }
+                else if (currentlinetext.Length >= 1 ? char.IsDigit(currentlinetext[0]) &&  currentlinetext.IndexOf(". ") != -1 : false)
+                {
+                    int IndexDot = currentlinetext.IndexOf(".");
+                    string subText = currentlinetext.Substring(0, IndexDot);
+                    if(Regex.IsMatch(subText, @"^+?\d+$"))
+                    {
+                        OrderedList(firstcharindex,currentlinetext);
+                    }
+                }else if (currentlinetext.Length >= 1 ? (currentlinetext.IndexOf("- ") != -1 || currentlinetext.IndexOf("• ") != -1) : false)
+                {
+                        UnOrderedList(firstcharindex,currentlinetext);
+                }
                 else {
                     if (richTextBox1.SelectionFont.Size != 14)
                     {
                         richTextBox1.Select(firstcharindex, currentlinetext.Length);
+                         if (currentlinetext.Length == 0 || !currentlinetext.StartsWith("•"))
+                        {
+                            Debug.WriteLine("çıktım");
+                            richTextBox1.SelectionIndent = 0;
+                        }
                         richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Regular);
                         richTextBox1.SelectionColor = Color.White;
                         richTextBox1.Select(firstcharindex + currentlinetext.Length, 0);
                         richTextBox1.DeselectAll();
                 }
 
-            };
+                };
 
                 if (Regex.Matches(currentlinetext, @"\*\*").Count >= 1)
                 {
@@ -227,10 +249,46 @@ namespace toMarkdown
             }
         }
 
-        private void DefaultText(string text)
+        private void BlockquoteText(int firstcharindex, string currentlinetext)
         {
-
+            richTextBox1.SelectionIndent = 20;
+            richTextBox1.Select(firstcharindex, 10);
+            richTextBox1.SelectionBackColor = Color.Gray;
         }
+
+        private void OrderedList(int firstcharindex, string currentlinetext)
+        {
+            richTextBox1.Select(firstcharindex, currentlinetext.Length);
+            richTextBox1.SelectionIndent = 20;
+            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 13, FontStyle.Regular);
+            richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+        }
+
+        private void UnOrderedList(int firstcharindex, string currentlinetext)
+        {
+            // "• " ifadesindeki boşuk silinince intendt sıfırlanmıyor!
+            if (currentlinetext[0] == '-')
+            {
+                currentlinetext = currentlinetext.TrimStart('-').Insert(0, "•");
+                richTextBox1.Select(firstcharindex, currentlinetext.Length);
+                richTextBox1.SelectedText = currentlinetext;
+                //richTextBox1.Select(firstcharindex, currentlinetext.Length);
+                richTextBox1.SelectionIndent = 20;
+                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 13, FontStyle.Regular);
+                richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
+            }
+            else if (currentlinetext.Length == 1 && currentlinetext[0] == '•')
+            {
+                richTextBox1.Select(firstcharindex, currentlinetext.Length);
+                richTextBox1.SelectionIndent = 0;
+            }
+        }
+
+
+
+        //private void DefaultText(string text)
+        //{
+        //}
 
         private void AddHorizontalLineToLine(int lineNumber, int thickness = 1)
         {
