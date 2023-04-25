@@ -39,7 +39,7 @@ namespace toMarkdown
             {
                 string currentlinetext = richTextBox1.Lines[currentline];
 
-                if (currentlinetext.StartsWith("# "))
+                if (richTextBox1.Font.Size == 32  || currentlinetext.StartsWith("# "))
                 {
                     Heading_1(firstcharindex, currentlinetext, 32);
                 }
@@ -71,16 +71,21 @@ namespace toMarkdown
                 else {
                     if (richTextBox1.SelectionFont.Size != 14)
                     {
-                        richTextBox1.Select(firstcharindex, currentlinetext.Length);
-                         if (currentlinetext.Length == 0 || !currentlinetext.StartsWith("•"))
+                        //richTextBox1.Select(firstcharindex, currentlinetext.Length);
+                         if (!currentlinetext.StartsWith("•"))
                         {
                             Debug.WriteLine("çıktım");
                             richTextBox1.SelectionIndent = 0;
                         }
-                        richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Regular);
-                        richTextBox1.SelectionColor = Color.White;
-                        richTextBox1.Select(firstcharindex + currentlinetext.Length, 0);
-                        richTextBox1.DeselectAll();
+                         if(!(currentlinetext.Length > 0 && (richTextBox1.SelectionFont.Size == 32 || richTextBox1.SelectionFont.Size == 24 || richTextBox1.SelectionFont.Size == 18)))
+                        {
+                            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Regular);
+                            richTextBox1.SelectionColor = Color.White;
+                            richTextBox1.Select(firstcharindex + currentlinetext.Length, 0);
+                            richTextBox1.DeselectAll();
+                        }
+
+                     
                 }
 
                 };
@@ -106,7 +111,7 @@ namespace toMarkdown
                 richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
                 // en son yazdıpımız text'in sonuna atar.
                 richTextBox1.Select(firstcharindex, 2);
-                richTextBox1.SelectionColor = Color.Gray;
+                richTextBox1.SelectedText = "";
                 richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
                 richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
                 richTextBox1.SelectionColor = Color.White;
@@ -122,7 +127,8 @@ namespace toMarkdown
                 richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
                 // en son yazdıpımız text'in sonuna atar.
                 richTextBox1.Select(firstcharindex, 3);
-                richTextBox1.SelectionColor = Color.Gray;
+                //richTextBox1.SelectionColor = Color.Gray;
+                richTextBox1.SelectedText = "";
                 richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
                 richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
                 richTextBox1.SelectionColor = Color.White;
@@ -140,7 +146,8 @@ namespace toMarkdown
                 richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
                 // en son yazdıpımız text'in sonuna atar.
                 richTextBox1.Select(firstcharindex, 4);
-                richTextBox1.SelectionColor = Color.Gray;
+                //richTextBox1.SelectionColor = Color.Gray;
+                richTextBox1.SelectedText = "";
                 richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
                 richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
                 richTextBox1.SelectionColor = Color.White;
