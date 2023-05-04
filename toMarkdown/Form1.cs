@@ -12,12 +12,12 @@ using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text.RegularExpressions;
 using System.Runtime.Remoting.Messaging;
+using System.Windows.Forms.VisualStyles;
 
 namespace toMarkdown
 { // 1 KERE SELECT YAPMA ?
     public partial class ToMarkdown : Form
     {
-
         public ToMarkdown()
         {
             InitializeComponent();
@@ -25,14 +25,15 @@ namespace toMarkdown
 
         int currentline; // son değişen satırın indeksi, -1 ile başlatılır
         //bool isTextChanged = false; // metinde değişiklik olup olmadığını kontrol eder
-        string text;
+        //string text;
+
         private void richTextBox1_TextChanged(object sender, EventArgs e)
         {
+
             //GetFirstCharIndexOfCurrentLine() yöntemi, kontroldeki mevcut satırın ilk karakterinin indexini döndürürken,
             //GetLineFromCharIndex() yöntemi, bir karakter dizininin satır numarasını döndürür.
             int firstcharindex = richTextBox1.GetFirstCharIndexOfCurrentLine();
-
-
+            
             currentline = richTextBox1.GetLineFromCharIndex(firstcharindex);
 
             if (richTextBox1.Lines.Length > currentline)
@@ -41,15 +42,18 @@ namespace toMarkdown
 
                 if (richTextBox1.Font.Size == 32  || currentlinetext.StartsWith("# "))
                 {
-                    Heading_1(firstcharindex, currentlinetext, 32);
+                    DefaultText headline_1 = new DefaultText(richTextBox1.SelectionFont.FontFamily, 32, FontStyle.Regular, Color.White, this);
+                    headline_1.Headline(firstcharindex, 1, currentlinetext, 32);
                 }
                 else if (currentlinetext.StartsWith("## "))
                 {
-                    Heading_2(firstcharindex, currentlinetext, 24);
+                    DefaultText headline_2 = new DefaultText(richTextBox1.SelectionFont.FontFamily, 24, FontStyle.Regular, Color.White, this);
+                    headline_2.Headline(firstcharindex, 2, currentlinetext, 24);
                 }
                 else if (currentlinetext.StartsWith("### "))
                 {
-                    Heading_3(firstcharindex, currentlinetext, 18);
+                    DefaultText headline_3 = new DefaultText(richTextBox1.SelectionFont.FontFamily, 18, FontStyle.Regular, Color.White, this);
+                    headline_3.Headline(firstcharindex, 3, currentlinetext, 18);
                 }
                 else if (currentlinetext.StartsWith(">"))
                 {
@@ -79,10 +83,9 @@ namespace toMarkdown
                         }
                          if(!(currentlinetext.Length > 0 && (richTextBox1.SelectionFont.Size == 32 || richTextBox1.SelectionFont.Size == 24 || richTextBox1.SelectionFont.Size == 18)))
                         {
-                            richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Regular);
-                            richTextBox1.SelectionColor = Color.White;
-                            richTextBox1.Select(firstcharindex + currentlinetext.Length, 0);
-                            richTextBox1.DeselectAll();
+                            DefaultText defaultText = new DefaultText(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Regular, Color.White, this);
+
+                           defaultText.Default_text(firstcharindex, currentlinetext);
                         }
 
                      
@@ -103,58 +106,6 @@ namespace toMarkdown
 
         }
 
-        private void Heading_1(int firstcharindex, string currentlinetext, float fontSize)
-        {
-            if (richTextBox1.SelectionFont.Size != fontSize)
-            {
-                richTextBox1.Select(firstcharindex + 1, currentlinetext.Length);
-                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
-                // en son yazdıpımız text'in sonuna atar.
-                richTextBox1.Select(firstcharindex, 2);
-                richTextBox1.SelectedText = "";
-                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
-                richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
-                richTextBox1.SelectionColor = Color.White;
-                richTextBox1.DeselectAll();
-            }
-            // currentlinetext.Length mevcut satırdaki text'in uzunluğu
-        }
-        private void Heading_2(int firstcharindex, string currentlinetext, float fontSize)
-        {
-            if(richTextBox1.SelectionFont.Size != fontSize)
-            {
-                richTextBox1.Select(firstcharindex + 2, currentlinetext.Length);
-                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
-                // en son yazdıpımız text'in sonuna atar.
-                richTextBox1.Select(firstcharindex, 3);
-                //richTextBox1.SelectionColor = Color.Gray;
-                richTextBox1.SelectedText = "";
-                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
-                richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
-                richTextBox1.SelectionColor = Color.White;
-                richTextBox1.DeselectAll();
-                // currentlinetext.Length mevcut satırdaki text'in uzunluğu
-            }
-        }
-           
-
-        private void Heading_3(int firstcharindex, string currentlinetext, float fontSize)
-        {
-            if(richTextBox1.SelectionFont.Size != fontSize)
-            {
-                richTextBox1.Select(firstcharindex + 3, currentlinetext.Length);
-                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
-                // en son yazdıpımız text'in sonuna atar.
-                richTextBox1.Select(firstcharindex, 4);
-                //richTextBox1.SelectionColor = Color.Gray;
-                richTextBox1.SelectedText = "";
-                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, fontSize, FontStyle.Regular);
-                richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
-                richTextBox1.SelectionColor = Color.White;
-                richTextBox1.DeselectAll();
-                // currentlinetext.Length mevcut satırdaki text'in uzunluğu
-            }
-        }
         int firstIndexBold;
         int secondIndexBold;
         int firstcharindexBold;
@@ -162,48 +113,9 @@ namespace toMarkdown
         //int cu
         private void BoldText(int firstcharindex, string currentlinetext)
         {
-        
+            DefaultText defaultText = new DefaultText(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Bold, Color.White, this);
 
-            if (this.firstcharindexBold != firstcharindex)
-            {
-                firstIndexBold = 0;
-                secondIndexBold = 0;
-                this.firstcharindexBold = firstcharindex;
-            }
-            if (this.currentlinetextBold != currentlinetext && this.firstcharindexBold == firstcharindex)
-            {
-                if (this.currentlinetextBold.Length > currentlinetext.Length)
-                {
-                    secondIndexBold = currentlinetext.LastIndexOf("**");
-                    richTextBox1.SelectionColor = Color.White;
-                    richTextBox1.DeselectAll();
-                }
-                this.currentlinetextBold = currentlinetext;
-            }
-
-            if (currentlinetext.IndexOf("**", secondIndexBold + 2 > currentlinetext.Length ? 0 : secondIndexBold + 2) != -1 && secondIndexBold != -1)
-            {
-                firstIndexBold = currentlinetext.IndexOf("**",0);
-                secondIndexBold = currentlinetext.IndexOf("**", firstIndexBold + 2);
-                if (secondIndexBold == -1)
-                {
-                    secondIndexBold = 0;
-                    return;
-                }
-
-
-                richTextBox1.Select(firstcharindex + firstIndexBold + 2, secondIndexBold - firstIndexBold - 2);
-                    richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Bold);
-                    richTextBox1.SelectionColor = Color.Green;
-                    richTextBox1.Select(firstcharindex + firstIndexBold, 2);
-                    richTextBox1.SelectedText = "";
-                    richTextBox1.Select(firstcharindex + secondIndexBold - 2, 2);
-                    richTextBox1.SelectedText = "";
-                    this.currentlinetextBold = richTextBox1.Lines[currentline];
-                    richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
-                    richTextBox1.SelectionColor = Color.White;
-                richTextBox1.DeselectAll();
-            }
+            defaultText.BoldText(firstcharindex, 2, currentlinetext, currentline);
         }
 
 
@@ -214,46 +126,9 @@ namespace toMarkdown
 
         private void ItalicText(int firstcharindex, string currentlinetext)
         {
+            DefaultText defaultText = new DefaultText(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Italic, Color.White, this);
 
-            if (this.firstcharindexItalic != firstcharindex)
-            {
-                firstIndexItalic = 0;
-                secondIndexItalic = 0;
-                this.firstcharindexItalic = firstcharindex;
-            }
-            if (this.currentlinetextItalic != currentlinetext && this.firstcharindexItalic == firstcharindex)
-            {
-                if (this.currentlinetextItalic.Length > currentlinetext.Length)
-                {
-                    firstIndexItalic = currentlinetext.LastIndexOf("*");
-                    richTextBox1.SelectionColor = Color.White;
-                    richTextBox1.DeselectAll();
-                }
-                this.currentlinetextItalic = currentlinetext;
-            }
-            if (currentlinetext.IndexOf("*", secondIndexItalic + 1 >= currentlinetext.Length ? 0 : secondIndexItalic + 1) != -1 && secondIndexItalic != -1)
-            {
-                firstIndexItalic = currentlinetext.IndexOf("*", 0);
-                secondIndexItalic = currentlinetext.IndexOf("*", firstIndexItalic + 1);
-                if (secondIndexItalic == -1)
-                {
-                    secondIndexItalic = 0;
-                    return;
-                }
-
-                richTextBox1.Select(firstcharindex + firstIndexItalic + 1, secondIndexItalic - firstIndexItalic - 1);
-                richTextBox1.SelectionFont = new Font(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Italic);
-                richTextBox1.SelectionColor = Color.Green;
-                richTextBox1.Select(firstcharindex + firstIndexItalic, 1);
-                richTextBox1.SelectedText = "";
-                richTextBox1.Select(firstcharindex + secondIndexItalic - 1, 1);
-                richTextBox1.SelectedText = "";
-                this.currentlinetextItalic = richTextBox1.Lines[currentline];
-                richTextBox1.Select(currentlinetext.Length + firstcharindex, 0);
-                richTextBox1.SelectionColor = Color.White;
-                richTextBox1.DeselectAll();
-
-            }
+            defaultText.ItalicText(firstcharindex, 1 ,currentlinetext, currentline);
         }
 
         private void BlockquoteText(int firstcharindex, string currentlinetext)
