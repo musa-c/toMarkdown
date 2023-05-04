@@ -84,53 +84,27 @@ namespace toMarkdown
                          if(!(currentlinetext.Length > 0 && (richTextBox1.SelectionFont.Size == 32 || richTextBox1.SelectionFont.Size == 24 || richTextBox1.SelectionFont.Size == 18)))
                         {
                             DefaultText defaultText = new DefaultText(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Regular, Color.White, this);
-
                            defaultText.Default_text(firstcharindex, currentlinetext);
                         }
-
-                     
                 }
-
                 };
-
                 if (Regex.Matches(currentlinetext, @"\*\*").Count >= 1)
                 {
-                    BoldText(firstcharindex, currentlinetext);
+                    DefaultText defaultText = new DefaultText(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Bold, Color.White, this);
+                    defaultText.BoldText(firstcharindex, 2, currentlinetext, currentline);
 
-                }else if (Regex.Matches(currentlinetext, @"\*").Count >= 2)
+                }
+                else if (Regex.Matches(currentlinetext, @"\*").Count >= 2)
                 {
-                    ItalicText(firstcharindex, currentlinetext);
+                    DefaultText defaultText = new DefaultText(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Italic, Color.White, this);
+                    defaultText.ItalicText(firstcharindex, 1, currentlinetext, currentline);
 
                 }
             }
 
         }
 
-        int firstIndexBold;
-        int secondIndexBold;
-        int firstcharindexBold;
-        string currentlinetextBold = "";
-        //int cu
-        private void BoldText(int firstcharindex, string currentlinetext)
-        {
-            DefaultText defaultText = new DefaultText(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Bold, Color.White, this);
-
-            defaultText.BoldText(firstcharindex, 2, currentlinetext, currentline);
-        }
-
-
-        int firstIndexItalic;
-        int secondIndexItalic;
-        int firstcharindexItalic;
-        string currentlinetextItalic = "";
-
-        private void ItalicText(int firstcharindex, string currentlinetext)
-        {
-            DefaultText defaultText = new DefaultText(richTextBox1.SelectionFont.FontFamily, 14, FontStyle.Italic, Color.White, this);
-
-            defaultText.ItalicText(firstcharindex, 1 ,currentlinetext, currentline);
-        }
-
+  
         private void BlockquoteText(int firstcharindex, string currentlinetext)
         {
             richTextBox1.SelectionIndent = 20;
